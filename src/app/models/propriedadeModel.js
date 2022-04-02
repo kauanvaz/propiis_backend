@@ -34,9 +34,10 @@ const PropriedadeSchema = new mongoose.Schema({
         type: Object,
         require: true,
     },
-    proprietario: {
-        type: Object,
+    reservada: {
+        type: Boolean,
         require: true,
+        default: false,
     }
 });
 

@@ -13,8 +13,13 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:projectId', async (req, res) => {
-
+router.get('/:cidade', async (req, res) => {
+  try{
+    const propriedades = await Propriedade.find({"localizacao.cidade":req.params.cidade, "reservada": false});
+    return res.send({ propriedades })
+  }catch(err){
+    return res.status(400).send({error: 'Erro ao carregar as propriedades'});
+  }
 });
 
 router.post('/', async (req, res) => {
