@@ -15,28 +15,15 @@ function generateToken (params = {}){
 }
 
 router.post('/register', async (req,res) => { // ROTA DE REGISTRO
-
-
     try {
-        
-
- //       if (await User.findOne({ email })){
- //           return res.status(400).send({error: 'User already exists' });}
-            
         const user = await User.create(req.body);
-
-
- //       user.password = undefined;
-
         return res.send({ user,
             token: generateToken({id: user.id}),
         });
     } catch (err) {
         return res.status(400).send({error: 'Registration failed'});
-        
     }
 });
-
 
 router.post('/authenticate', async (req, res)=> { // ROTA DE AUTENTICACAO
     const {email, senha} = req.body;
@@ -60,6 +47,6 @@ router.post('/authenticate', async (req, res)=> { // ROTA DE AUTENTICACAO
         token: generateToken({id: user.id}),
     });
 
-}); 
+});
 
 module.exports = app => app.use('/auth', router);

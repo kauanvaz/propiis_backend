@@ -1,43 +1,50 @@
 const mongoose = require('../../database');
 
 const PropriedadeSchema = new mongoose.Schema({
+    host: {
+        nome: {type: String, require: true},
+        telefone: {type: String, require: true},
+        imagem_perfil: {type: String, require: true},
+        id: {type: mongoose.Types.ObjectId, require: true}
+    },
     titulo: {
         type: String,
-        require: true,
+        require: true
     },
     descricao: {
         type: String,
-        unique: true,
-        require: true,
+        require: true
     },
     fotos: [{
         type: String,
-        require: true,
+        require: true
     }],
     preco_diaria: {
         type: Number,
-        require: true,
+        require: true
     },
     taxa: {
         type: Number,
-        require: true,
+        require: true
     },
     quartos: {
         type: Number,
-        require: true,
+        require: true
     },
     banheiros: {
         type: Number,
-        require: true,
+        require: true
     },
-    localizacao: {
-        type: Object,
-        require: true,
+    localizacao: {    
+        endereco: {type: String, require: true},
+        cidade: {type: String, require: true},
+        estado: {type: String, require: true},
+        coordinates: {type: Array, require: true},
+        type: {type: String, default: "Point"}
     },
     reservada: {
         type: Boolean,
-        require: true,
-        default: false,
+        default: false
     }
 });
 
