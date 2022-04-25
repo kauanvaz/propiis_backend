@@ -1,6 +1,7 @@
 const express = require('express'); 
 
 const Propriedade = require('../models/propriedadeModel');
+const Solicitacao = require('../models/solicitacaoModel');
 
 const router = express.Router();
 
@@ -15,9 +16,35 @@ router.get('/unica/:id', async (req, res) => {
 });
 
 // Pesquisa por cidade
-router.get('/cidade/:cidade', async (req, res) => {
+router.get('/cidade', async (req, res) => {
   try{
-    const propriedades = await Propriedade.find({"localizacao.cidade":req.params.cidade, "reservada": false});
+    let cidade = req.query.cidade;
+    let inicio = (new Date(req.query.inicio)).getTime();
+    let fim = (new Date(req.query.fim)).getTime();
+
+    const todas_propri = await Propriedade.find({"localizacao.cidade":cidade});
+
+    let propriedades = todas_propri.filter(function (e) {
+      return e.reservada === false;
+    });
+
+    if (propriedades.length !== todas_propri.length) {
+      //const reservadas = await Propriedade.find({"localizacao.cidade":req.params.cidade, "reservada":true});
+
+      const solicitacoes = await Solicitacao.find({"propriedade.localizacao.cidade":cidade, "status":"Aceita"})
+
+      for (var i = 0; i < solicitacoes.length; i++) {
+        const r_inicio = solicitacoes[i].periodo.inicio.getTime();
+        const r_fim = solicitacoes[i].periodo.fim.getTime()
+
+        if ((inicio >= r_inicio && inicio <= r_fim) || (fim <= r_fim && fim >= r_inicio) || (inicio <= r_inicio && fim >= r_fim)){
+          break;
+        }else {
+          propriedades.push(await Propriedade.findById(String(solicitacoes[i].propriedade.id)))
+        }
+      }
+    }
+
     return res.send({ propriedades })
   }catch(err){
     return res.status(400).send({error: 'Erro ao carregar as propriedades'});
@@ -42,8 +69,8 @@ router.post('/cadastrarVarias', async (req, res) => {
   }
 });
 
-router.put('/', async (req, res) => {
-
+router.put('/:idPropriedade', async (req, res) => {
+  
 });
 
 router.delete('/', async (req, res) => {

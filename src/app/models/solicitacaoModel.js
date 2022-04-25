@@ -3,7 +3,7 @@ const mongoose = require('../../database');
 const SolicitacaoSchema = new mongoose.Schema({
     status: {
         type: String,
-        default: "Em andamento",
+        default: "Pendente",
     },
     user: {
         nome: {type: String, require: true},
