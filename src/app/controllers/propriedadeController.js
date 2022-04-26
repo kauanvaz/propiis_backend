@@ -4,16 +4,18 @@ const Propriedade = require('../models/propriedadeModel');
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
+// pesquisa de propriedade única
+router.get('/unica/:id', async (req, res) => {
   try{
-    const propriedades = await Propriedade.find();
+    const propriedades = await Propriedade.find({"_id":req.params.id});
     return res.send({ propriedades })
   }catch(err){
     return res.status(400).send({error: 'Erro ao carregar as propriedades'});
   }
 });
 
-router.get('/:cidade', async (req, res) => {
+// pesquisa por cidade
+router.get('/cidade/:cidade', async (req, res) => {
   try{
     const propriedades = await Propriedade.find({"localizacao.cidade":req.params.cidade, "reservada": false});
     return res.send({ propriedades })
