@@ -64,6 +64,21 @@ router.put('/:idSolicitacao', async (req, res) => {
     }
 });
 
+// Aceitar/recusar solicitação de reserva
+router.put('/pagamento/:idSolicitacao', async (req, res) => {
+    const { pago } = req.body
+
+    try{
+        const solicitacao = await Solicitacao.findByIdAndUpdate(req.params.idSolicitacao, {
+            pago
+        }, { new: true });
+
+        return res.send({ solicitacao });
+    }catch(err) {
+        return res.status(400).send({error: "Erro ao pagar reserva."})
+    }
+});
+
 router.delete('/', async (req, res) => {
 
 });
