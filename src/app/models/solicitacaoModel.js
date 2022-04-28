@@ -34,6 +34,10 @@ const SolicitacaoSchema = new mongoose.Schema({
     valor_total: {
         type: Number,
         require: true
+    },
+    pago: {
+        type: Boolean,
+        default: false
     }
 });
 
