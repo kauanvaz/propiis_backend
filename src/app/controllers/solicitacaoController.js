@@ -5,6 +5,17 @@ const Propriedade = require('../models/propriedadeModel');
 
 const router = express.Router();
 
+// Recuperação de solicitação de reserva única
+router.get('/:id', async (req, res) => { 
+    try{
+        const solicitacao = await Solicitacao.findById(req.params.id);
+            
+        return res.send({ solicitacao })
+      }catch(err){
+        return res.status(400).send({error: 'Erro ao carregar solicitação.'});
+    }
+})
+
 // Recuperação da lista de solicitações de reserva do usuário comum
 router.get('/recuperar/usuario', async (req, res) => { 
     try{
