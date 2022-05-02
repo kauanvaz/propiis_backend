@@ -90,8 +90,13 @@ router.put('/pagamento/:idSolicitacao', async (req, res) => {
     }
 });
 
-router.delete('/', async (req, res) => {
-
-});
+router.delete('/:id', async (req, res) => {
+    try{
+        await Solicitacao.findByIdAndRemove(req.params.id);
+        return res.send();
+    }catch(err) {
+        return res.status(400).send({error: "Erro ao cancelar solicitação."})
+    }
+});;
 
 module.exports = app => app.use('/solicitacoes', router);
