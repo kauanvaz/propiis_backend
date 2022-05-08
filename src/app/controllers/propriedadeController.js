@@ -51,6 +51,24 @@ router.get('/cidade', async (req, res) => {
   }
 });
 
+// Recupera avaliação de um usuário
+router.get('/avaliacao', async (req, res) => {
+  let propri = req.query.propriedade;
+  let user = req.query.user
+
+  try{
+    const propriedade = await Propriedade.findById(propri);
+
+    let avaliacao = propriedade.avaliacoes.filter(function (e) {
+      return String(e.id_user) === user;
+    });
+
+    return res.send({ avaliacao });
+  }catch(err){
+    return res.status(400).send({error: 'Erro ao recuperar avaliação.'}); 
+  }
+});
+
 router.post('/cadastrar', async (req, res) => {
   try{
     const propriedade = await Propriedade.create(req.body);
