@@ -45,7 +45,14 @@ const PropriedadeSchema = new mongoose.Schema({
     reservada: {
         type: Boolean,
         default: false
-    }
+    },
+    avaliacoes: [{
+        nome: {type: String},
+        email: {type: String},
+        id_user: {type: mongoose.Types.ObjectId},
+        estrelas: {type: Number},
+        comentario: {type: String},
+    }]
 });
 
 const Propriedade = mongoose.model('propriedades', PropriedadeSchema);
