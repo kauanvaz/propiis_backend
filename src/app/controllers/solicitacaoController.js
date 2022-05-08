@@ -75,7 +75,7 @@ router.put('/:idSolicitacao', async (req, res) => {
     }
 });
 
-// Aceitar/recusar solicitação de reserva
+// Pagar reserva
 router.put('/pagamento/:idSolicitacao', async (req, res) => {
     const { pago } = req.body
 

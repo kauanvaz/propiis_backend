@@ -11,11 +11,11 @@ router.get('/unica/:id', async (req, res) => {
     const propriedades = await Propriedade.find({"_id":req.params.id});
     return res.send({ propriedades })
   }catch(err){
-    return res.status(400).send({error: 'Erro ao carregar as propriedades'});
+    return res.status(400).send({error: 'Erro ao carregar propriedade'});
   }
 });
 
-// Pesquisa por cidade
+// Pesquisa por cidade, e periodo
 router.get('/cidade', async (req, res) => {
   try{
     let cidade = req.query.cidade;
@@ -69,8 +69,26 @@ router.post('/cadastrarVarias', async (req, res) => {
   }
 });
 
-router.put('/:idPropriedade', async (req, res) => {
-  
+// Avaliar propriedade
+router.put('/avaliar/:idPropriedade', async (req, res) => {
+  const { avaliacao } = req.body
+
+    try{
+        const propriedade = await Propriedade.findByIdAndUpdate(req.params.idPropriedade, {
+          $push: {
+            avaliacoes: {
+              $each: [
+                avaliacao
+              ],
+              $position: 0
+            }
+          }
+        }, { new: true });
+
+        return res.send({ propriedade });
+    }catch(err) {
+        return res.status(400).send({error: "Erro ao avaliar propriedade."})
+    }
 });
 
 router.delete('/', async (req, res) => {
