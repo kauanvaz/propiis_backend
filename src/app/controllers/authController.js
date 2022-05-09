@@ -49,4 +49,33 @@ router.post('/authenticate', async (req, res)=> { // ROTA DE AUTENTICACAO
 
 });
 
+// Avaliar cliente
+router.put('/avaliar/:idUser', async (req, res) => {
+    const { avaliacao } = req.body
+  
+    try{
+        const u = await User.findById(req.params.idUser);
+
+        let aval_geral = (u.avaliacoes.reduce((soma, i) => {
+          return soma + i.estrelas;
+        }, 0)+avaliacao.estrelas)/(u.avaliacoes.length+1)
+
+        const user = await User.findByIdAndUpdate(req.params.idUser, {
+            $push: {
+                avaliacoes: {
+                    $each: [
+                        avaliacao
+                    ],
+                    $position: 0
+                }
+            },
+            avaliacao_geral: aval_geral
+        }, { new: true });
+  
+        return res.send({ user });
+    }catch(err) {
+          return res.status(400).send({error: "Erro ao avaliar usuário."})
+    }
+});
+
 module.exports = app => app.use('/auth', router);
