@@ -92,16 +92,23 @@ router.put('/avaliar/:idPropriedade', async (req, res) => {
   const { avaliacao } = req.body
 
     try{
-        const propriedade = await Propriedade.findByIdAndUpdate(req.params.idPropriedade, {
-          $push: {
-            avaliacoes: {
-              $each: [
-                avaliacao
-              ],
-              $position: 0
-            }
+      const prop = await Propriedade.findById(req.params.idPropriedade);
+
+      let aval_geral = (prop.avaliacoes.reduce((soma, i) => {
+        return soma + i.estrelas;
+      }, 0)+avaliacao.estrelas)/(prop.avaliacoes.length+1)
+
+      const propriedade = await Propriedade.findByIdAndUpdate(req.params.idPropriedade, {
+        $push: {
+          avaliacoes: {
+            $each: [
+              avaliacao
+            ],
+            $position: 0
           }
-        }, { new: true });
+        },
+        avaliacao_geral: aval_geral
+      }, { new: true });
 
         return res.send({ propriedade });
     }catch(err) {
