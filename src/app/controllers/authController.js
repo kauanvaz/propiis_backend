@@ -14,6 +14,17 @@ function generateToken (params = {}){
     });
 }
 
+// Recupera um usuário
+router.get('/:idUser', async (req, res) => {
+    try{
+      const user = await User.findById(req.params.idUser);
+  
+      return res.send({ user });
+    }catch(err){
+      return res.status(400).send({error: 'Erro ao recuperar informações do usuário.'}); 
+    }
+});
+
 router.post('/register', async (req,res) => { // ROTA DE REGISTRO
     try {
         const user = await User.create(req.body);
