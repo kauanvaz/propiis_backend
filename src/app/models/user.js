@@ -40,6 +40,17 @@ const UserSchema = new mongoose.Schema({
     imagem_perfil: {
         type: String,
         default: "https://tunasunggul.sekolahk2.id:4343/pluginfile.php/1/theme_moove/marketing3icon/1644803449/kisspng-user-account-rsum-curriculum-vitae-europe-5b3d098f90a986.8282603915307267995926.png"
+    },
+    avaliacoes: [{
+        nome: {type: String},
+        email: {type: String},
+        id_user: {type: mongoose.Types.ObjectId},
+        estrelas: {type: Number},
+        comentario: {type: String},
+    }],
+    avaliacao_geral: {
+        type: Number,
+        default: -1
     }
 });
 
