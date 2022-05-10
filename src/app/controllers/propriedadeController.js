@@ -51,6 +51,24 @@ router.get('/cidade', async (req, res) => {
   }
 });
 
+// Recupera avaliação de um usuário
+router.get('/avaliacao', async (req, res) => {
+  let propri = req.query.propriedade;
+  let user = req.query.user
+
+  try{
+    const propriedade = await Propriedade.findById(propri);
+
+    let avaliacao = propriedade.avaliacoes.filter(function (e) {
+      return String(e.id_user) === user;
+    });
+
+    return res.send({ avaliacao });
+  }catch(err){
+    return res.status(400).send({error: 'Erro ao recuperar avaliação.'}); 
+  }
+});
+
 router.post('/cadastrar', async (req, res) => {
   try{
     const propriedade = await Propriedade.create(req.body);
@@ -74,16 +92,23 @@ router.put('/avaliar/:idPropriedade', async (req, res) => {
   const { avaliacao } = req.body
 
     try{
-        const propriedade = await Propriedade.findByIdAndUpdate(req.params.idPropriedade, {
-          $push: {
-            avaliacoes: {
-              $each: [
-                avaliacao
-              ],
-              $position: 0
-            }
+      const prop = await Propriedade.findById(req.params.idPropriedade);
+
+      let aval_geral = (prop.avaliacoes.reduce((soma, i) => {
+        return soma + i.estrelas;
+      }, 0)+avaliacao.estrelas)/(prop.avaliacoes.length+1)
+
+      const propriedade = await Propriedade.findByIdAndUpdate(req.params.idPropriedade, {
+        $push: {
+          avaliacoes: {
+            $each: [
+              avaliacao
+            ],
+            $position: 0
           }
-        }, { new: true });
+        },
+        avaliacao_geral: aval_geral
+      }, { new: true });
 
         return res.send({ propriedade });
     }catch(err) {

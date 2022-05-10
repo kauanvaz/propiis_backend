@@ -52,7 +52,11 @@ const PropriedadeSchema = new mongoose.Schema({
         id_user: {type: mongoose.Types.ObjectId},
         estrelas: {type: Number},
         comentario: {type: String},
-    }]
+    }],
+    avaliacao_geral: {
+        type: Number,
+        default: -1
+    }
 });
 
 const Propriedade = mongoose.model('propriedades', PropriedadeSchema);
