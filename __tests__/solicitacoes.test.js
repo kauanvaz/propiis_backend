@@ -4,7 +4,7 @@ const solicitacoesData = require('../mock-tests/data/solicitacoes.json');
 const fs = require('fs');
 const mongoose = require('../src/database/index');
 
-describe("Inserção de solicitacoes", () => {
+describe("Inserção de solicitação", () => {
     afterAll(() => {
         while (solicitacoesData.length > 0) {
             solicitacoesData.pop();

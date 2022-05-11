@@ -38,6 +38,10 @@ const SolicitacaoSchema = new mongoose.Schema({
     pago: {
         type: Boolean,
         default: false
+    },
+    estrelas: {
+        type: Number,
+        default: -1 
     }
 });
 
