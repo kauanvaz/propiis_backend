@@ -110,7 +110,13 @@ router.put('/avaliar/:idPropriedade', async (req, res) => {
         avaliacao_geral: aval_geral
       }, { new: true });
 
-        return res.send({ propriedade });
+      const solic = await Solicitacao.findOne({"propriedade.id":req.params.idPropriedade, "user.id":avaliacao.id_user});
+
+      await Solicitacao.findByIdAndUpdate(solic._id, {
+        estrelas:avaliacao.estrelas
+      })
+
+        return res.send({ avaliacao });
     }catch(err) {
         return res.status(400).send({error: "Erro ao avaliar propriedade."})
     }
