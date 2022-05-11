@@ -4,30 +4,40 @@ const { nanoid } = require('nanoid');
 const express = require('express'); 
 const router = express.Router();
 
-const usersData = require('../data/users.json');
+const solicitacoesData = require('../data/solicitacoes.json');
 
 router.post('/cadastrar', (req, res) => {
     try{
-        const { nome, cpf, telefone, email, senha, tipo_user} = req.body;
+        const { user, user_host, propriedade, periodo, valor_total } = req.body;
 
-        const novoUsuario = {
+        const novaSolicitacao = {
             "id": nanoid(),
-            "nome": nome,
-            "cpf": cpf,
-            "telefone": telefone,
-            "email": email,
-            "senha": senha,
-            "tipo_user": tipo_user
+            "status": "Pendente",
+            "user": user,
+            "user_host": user_host,
+            "propriedade": propriedade,
+            "periodo": periodo,
+            "valor_total": valor_total,
+            "pago": false
         };
 
-        usersData.push(novoUsuario);
-        fs.writeFileSync('mock-tests/data/users.json', JSON.stringify(usersData));
+        solicitacoesData.push(novaSolicitacao);
+        fs.writeFileSync('mock-tests/data/solicitacoes.json', JSON.stringify(solicitacoesData));
 
-        res.status(200).send(novoUsuario);
+        res.status(200).send(novaSolicitacao);
     }catch(err){
-        return res.status(400).send({error: 'Erro ao cadastrar usuario.'}); 
+        return res.status(400).send({error: 'Erro ao solicitar reserva.'}); 
     }
 });
+
+exports.post = (req, res, next) => {
+  
+};
+
+exports.get = (req, res, next) => {
+  // Envia a resposta com todos os usuários
+  res.status(200).send(usersData);
+}
 
 exports.delete = (req, res, next) => {
   // ID do usuário recebido na URL
@@ -51,4 +61,4 @@ exports.delete = (req, res, next) => {
   res.status(200).send({'mensagem': 'Usuário deletado.'});
 };
 
-module.exports = app => app.use('/teste-user', router);
+module.exports = app => app.use('/teste-solicitacao', router);

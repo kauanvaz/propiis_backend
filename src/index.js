@@ -10,6 +10,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 require('./app/controllers/index')(app);
-require('../mock-tests/controllers/userController')(app)
+require('../mock-tests/controllers/index')(app);
 
 module.exports = app;
