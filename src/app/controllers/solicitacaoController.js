@@ -90,6 +90,40 @@ router.put('/pagamento/:idSolicitacao', async (req, res) => {
     }
 });
 
+router.put('/avaliar/:idSolicitacao', async (req, res) => {
+    const { avaliacao } = req.body
+
+    const solic = await Solicitacao.findById(req.params.idSolicitacao);
+    
+    try{
+        const prop = await Propriedade.findById(solic.propriedade.id);
+  
+        let aval_geral = (prop.avaliacoes.reduce((soma, i) => {
+          return soma + i.estrelas;
+        }, 0)+avaliacao.estrelas)/(prop.avaliacoes.length+1)
+  
+        await Propriedade.findByIdAndUpdate(solic.propriedade.id, {
+          $push: {
+            avaliacoes: {
+              $each: [
+                avaliacao
+              ],
+              $position: 0
+            }
+          },
+          avaliacao_geral: aval_geral
+        }, { new: true });
+  
+        await Solicitacao.findByIdAndUpdate(solic._id, {
+          estrelas:avaliacao.estrelas
+        })
+  
+        return res.send({ avaliacao });
+    }catch(err) {
+          return res.status(400).send({error: "Erro ao avaliar propriedade."})
+    }
+  });
+
 router.delete('/:id', async (req, res) => {
     try{
         await Solicitacao.findByIdAndRemove(req.params.id);
