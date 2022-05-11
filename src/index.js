@@ -1,6 +1,5 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const res = require('express/lib/response');
 var cors = require('cors')
 
 const app = express();
@@ -11,6 +10,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 require('./app/controllers/index')(app);
-require('./app/controllers/authController')(app)
+require('../mock-tests/controllers/index')(app);
 
-app.listen(3333);
+module.exports = app;
