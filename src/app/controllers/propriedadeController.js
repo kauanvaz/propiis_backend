@@ -5,6 +5,16 @@ const Solicitacao = require('../models/solicitacaoModel');
 
 const router = express.Router();
 
+// Recupera todas as propriedades
+router.get('/', async (req, res) => {
+  try{
+    const propriedades = await Propriedade.find({});
+    return res.send({ propriedades })
+  }catch(err){
+    return res.status(400).send({error: 'Erro ao carregar propriedade'});
+  }
+});
+
 // pesquisa de propriedade única
 router.get('/unica/:id', async (req, res) => {
   try{

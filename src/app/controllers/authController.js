@@ -14,6 +14,17 @@ function generateToken (params = {}){
     });
 }
 
+// Recupera todos usuários
+router.get('/', async (req, res) => {
+    try{
+      const user = await User.find({});
+  
+      return res.send({ user });
+    }catch(err){
+      return res.status(400).send({error: 'Erro ao recuperar usuários.'}); 
+    }
+});
+
 // Recupera um usuário
 router.get('/:idUser', async (req, res) => {
     try{
