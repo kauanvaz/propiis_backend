@@ -1,7 +1,3 @@
 const app = require('../src/index');
 
-const port = '3333';
-
-app.listen(port, function () {
-  console.log(`Server is running...`)
-});
+app.listen(process.env.PORT || 3333);
